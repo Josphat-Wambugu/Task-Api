@@ -17,31 +17,35 @@ const getTaskById = async (id) => {
   return rows[0];
 };
 
-
+const getTasksByStatus = async (statusValue) => {
+  const [rows] = await con.query("SELECT * FROM tasks WHERE status = ?", [statusValue]);
+  return rows;
+};
 
 
 const createTask = async (task) => {
 
-  const { id, title, description, isCompleted, start_time, end_time } = task;
+  const { id, title, description, isCompleted, start_time, end_time, status } = task;
   
   await con.query(
-    "INSERT INTO tasks (id, title, description, isCompleted, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)",
-    [id, title, description, isCompleted || false, start_time || null, end_time || null]
+    "INSERT INTO tasks (id, title, description, isCompleted, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    [id, title, description, isCompleted || false, start_time || null, end_time || null, status || null]
   );
   
   return task;
 };
 
 const updateTask = async (id, task) => {
-  const { title, description, isCompleted, start_time, end_time } = task;
+  const { title, description, isCompleted, start_time, end_time,status } = task;
   await con.query(
-    "UPDATE tasks SET title = ?, description = ?, isCompleted = ?, start_time = ?, end_time = ? WHERE id = ?",
+    "UPDATE tasks SET title = ?, description = ?, isCompleted = ?, start_time = ?, end_time = ?, status = ? WHERE id = ?",
     [
       title || null, 
       description || null, 
       isCompleted ?? false, 
       start_time || null, 
       end_time || null, 
+      status || null,
       id
     ]
   );
@@ -63,7 +67,7 @@ const deleteCompletedTasks = async () => {
 export { 
   getAllTasks, 
   getTaskById, 
- 
+  getTasksByStatus,
   getCompletedTasks, 
   createTask, 
   updateTask, 

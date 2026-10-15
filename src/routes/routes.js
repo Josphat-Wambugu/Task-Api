@@ -8,6 +8,7 @@ import {
   deleteTaskController,
   deleteAllTasksController,
   deleteCompletedTasksController,
+  getTasksByStatusController
 } from '../Controllers/controller.js';
 import { getCompletedTasks } from '../Models/repository.js';
 
@@ -16,8 +17,11 @@ const router = express.Router();
 // Get all tasks
 router.get('/', getAllTasksController);
 
-// Get tasks by completion status (e.g., /api/tasks/status/true)
+
 router.get('/status/:isCompleted', getCompletedTasksController);
+
+
+router.get('/status/:statusValue', getTasksByStatusController);
 
 // Get a single task by ID
 router.get('/:id', getTaskByIdController);

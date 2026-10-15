@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import * as taskRepository from '../Models/repository.js';
 
-// Helper function to convert ISO strings to MySQL DATETIME format ('YYYY-MM-DD HH:MM:SS')
+
 const formatForMySQL = (dateString) => {
   if (!dateString) return null;
   const date = new Date(dateString);
@@ -26,8 +26,9 @@ export const createTask = async (taskData) => {
     title: taskData.title,
     description: taskData.description || null,
     isCompleted: taskData.isCompleted || false,
-    start_time: formatForMySQL(taskData.start_time), // <-- Format here
-    end_time: formatForMySQL(taskData.end_time),     // <-- Format here
+    start_time: formatForMySQL(taskData.start_time), 
+    end_time: formatForMySQL(taskData.end_time),  
+    status: taskData.status || null,
   };
 
   return await taskRepository.createTask(newTask);
@@ -40,16 +41,19 @@ export const getTaskById = async (id) => { return await taskRepository.getTaskBy
 
 export const getCompletedTasks = async (isCompleted) => { return await taskRepository.getCompletedTasks(isCompleted); };
 
+export const getTasksByStatus = async (statusValue) => { return await taskRepository.getTasksByStatus(statusValue); };
+
 export const updateTask = async (id, taskData) => { 
-    const newTask = {
+    const updatedTask = {
     
     title: taskData.title,
     description: taskData.description || null,
     isCompleted: taskData.isCompleted || false,
     start_time: formatForMySQL(taskData.start_time),
-    end_time: formatForMySQL(taskData.end_time),     
+    end_time: formatForMySQL(taskData.end_time),  
+    status: taskData.status || null,   
   };
-  return await taskRepository.updateTask(id, newTask); };
+  return await taskRepository.updateTask(id, updatedTask); };
 
 
 export const deleteTask = async (id) => { return await taskRepository.deleteTask(id); };

@@ -1,4 +1,4 @@
-import { createTask,getAllTasks,getTaskById,getCompletedTasks,updateTask,deleteAllTasks,deleteCompletedTasks,deleteTask}from '../Services/services.js';
+import { createTask,getAllTasks,getTaskById,getCompletedTasks,getTasksByStatus,updateTask,deleteAllTasks,deleteCompletedTasks,deleteTask}from '../Services/services.js';
 
 export const getAllTasksController = async (req, res) => {
   try {
@@ -30,6 +30,16 @@ export const getCompletedTasksController = async (req, res) => {
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch completed tasks' });
+  }
+};
+
+export const getTasksByStatusController = async (req, res) => {
+  const { statusValue } = req.params;
+  try {
+    const tasks = await getTasksByStatus(statusValue);
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch tasks by status', details: error.message ,});
   }
 };
 
